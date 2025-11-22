@@ -1,0 +1,50 @@
+<div class="flex flex-wrap gap-4 mb-6">
+    <input type="text" placeholder="Search message..." class="border rounded p-2 flex-1" id="searchInput" />
+    <select class="border rounded p-2" id="levelFilter">
+      <option value="">All Levels</option>
+      <option value="INFO">INFO</option>
+      <option value="WARN">WARN</option>
+      <option value="ERROR">ERROR</option>
+      <option value="CRITICAL">CRITICAL</option>
+    </select>
+    <select class="border rounded p-2" id="serviceFilter">
+      <option value="">All Services</option>
+      <option value="Gateway">Gateway</option>
+      <option value="Auth">Auth</option>
+      <option value="Payments">Payments</option>
+    </select>
+  </div>
+ 
+  <div class="overflow-x-auto bg-white shadow rounded-lg">
+    <table class="min-w-full divide-y divide-gray-200" id="logsTable">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Timestamp</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Level</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Service</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Message</th>
+          <th class="px-4 py-2 text-right text-sm font-medium text-gray-700">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200" id="logsBody">
+        <tr>
+          <td class="px-4 py-2 text-sm text-gray-800">2025-11-21 15:00</td>
+          <td class="px-4 py-2 text-sm font-medium">
+            <span class="px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">ERROR</span>
+          </td>
+          <td class="px-4 py-2 text-sm text-gray-800">Gateway</td>
+          <td class="px-4 py-2 text-sm text-gray-800">Failed to fetch user data</td>
+          <td class="px-4 py-2 text-right text-sm">
+            <button class="text-blue-600 hover:underline mr-2">View</button>
+            <button class="text-red-600 hover:underline">Delete</button>
+          </td>
+        </tr>
+        <tr>
+          <td class="px-4 py-2 text-sm text-gray-800">2025-11-21 14:30</td>
+          <td class="px-4 py-2 text-sm font-medium">
+            <span class="px-2 py-1 rounded-full text-xs"></span>
+          </td>
+        </tr>
+      </tbody>
+      </table>     
+    </div>
