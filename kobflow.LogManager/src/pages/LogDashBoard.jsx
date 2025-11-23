@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { LogCard } from "../components/LogCard";
-import { LogFetcher } from "../utils/LogFetcher";
+import { logFetcher } from "../utils/LogFetcher";
  
  
 
 function LogDashBoard()
 {
      function whenMountingFn()
-    {
-        const logFetcher = new LogFetcher();
+    { 
         logFetcher.GetAllLogs().then(function(fetchedLogs){
                         console.log("fetchedLogs",fetchedLogs);
                       setLogs(fetchedLogs);

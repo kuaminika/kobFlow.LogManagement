@@ -1,4 +1,4 @@
-import { useState } from "react"
+
 
 function LogCard({logItem})
 {
@@ -19,7 +19,7 @@ function LogCard({logItem})
 
 return     <div className={`${logColorSet[logItem.level]}  shadow rounded-lg p-4 border border-gray-100`}>
                 <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-500">{logItem.timestamp.toLocaleString()}</span>
+                    <span className="text-sm text-gray-500">{logItem.id} - [ {logItem.timestamp.toLocaleString()}]</span>
                     <span className={`px-2 py-1 rounded-full text-xs font-semibold border border-gray-400
  ${logColorSet[logItem.level]}`}>
                         {LOG_LEVELS[logItem.level]}
