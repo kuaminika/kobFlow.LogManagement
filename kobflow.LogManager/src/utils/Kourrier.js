@@ -1,40 +1,39 @@
-function Kourrier()
-{
+function Kourrier() {
     const self = this;
-    self.post = async function(fullURL,data,headerRules){
-          console.log("doing post with :",data,JSON.stringify(data))
-            console.log("posting:"+fullURL);
-            //    headerRules = headerRules || {  'Content-Type': 'application/json'  };
-            if (!headerRules || typeof headerRules !== 'object' || headerRules instanceof Map) {
-                headerRules = { 'Content-Type': 'application/json' };
-            }
-            const postOptions = {
-                     method: 'POST',
-                     body: JSON.stringify(data),
-                     headers: headerRules
-                   }
-            const prms = fetch(fullURL,postOptions).then(response => {
-                       if (typeof(response) == "object") resolve(response);
-                       if(typeof(response)== "string")  resolve(JSON.parse(response));
-                   });
 
-        const result = await prms;
-        return result;
-      
-    }
+    self.post = async function(fullURL, data, headerRules) {
+        console.log("doing post with:", data, JSON.stringify(data));
+        console.log("posting: " + fullURL);
 
-    self.get = async function(url){
+        if (!headerRules || typeof headerRules !== 'object' || headerRules instanceof Map) {
+            headerRules = { 'Content-Type': 'application/json' };
+        }
 
-         const dataPromise =  fetch(url).then(r=>{
-                    console.log(r);
-                    return r.json();
-        });   
+        const postOptions = {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: headerRules
+        };
 
-        const result = await dataPromise;
-        console.log(result);
-        return result;
-    }
+        const response = await fetch(fullURL, postOptions);
+
+        if (!response.ok) {
+            throw new Error(`Request failed: ${response.status} ${response.statusText}`);
+        }
+
+        return response.json();
+    };
+
+    self.get = async function(url) {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`Request failed: ${response.status} ${response.statusText}`);
+        }
+
+        return response.json();
+    };
 }
 
 const kCourrier = new Kourrier();
-export {kCourrier};
+export { kCourrier };

@@ -1,0 +1,25 @@
+#CsvImport #dropZone{
+    border: 3px solid black;
+    width:100%;
+}
+
+#CsvImport .submitBtn {
+  padding: 8px 20px;
+  border: 1px solid #050000;
+  border-radius: 6px;
+  background: rgb(39, 155, 16);
+  cursor: pointer;
+}
+
+#CsvImport .submitBtn:hover {
+  background: rgb(39, 155, 16);
+}
+
+#CsvImport .active{
+  display: block;
+}
+
+#CsvImport .non-active
+{
+  display: none;
+}
