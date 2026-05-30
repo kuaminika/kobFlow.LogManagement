@@ -1,0 +1,24 @@
+.typeahead {
+    position: relative; /* move from inline to here */
+    width: 100%;        /* fill the cell but don't exceed it */
+}
+
+.typeahead input {
+    width: 100%;
+    box-sizing: border-box; /* prevent padding from adding extra width */
+}
+
+.typeahead ul {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;   /* you have rgb(172,28,28) = red, probably unintentional */
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 1000;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}

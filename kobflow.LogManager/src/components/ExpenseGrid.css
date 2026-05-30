@@ -1,0 +1,222 @@
+#ExpenseGrid {
+    padding: 1rem;
+    font-family: sans-serif;
+    font-size: 13px;
+}
+
+#ExpenseGrid .holder-bar {
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 8px 14px;
+    margin-bottom: 1rem;
+    font-size: 13px;
+    color: #555;
+}
+
+#ExpenseGrid .holder-bar strong {
+    color: #111;
+}
+
+#ExpenseGrid .summary-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 1rem;
+}
+
+#ExpenseGrid .stat {
+    flex: 1;
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+#ExpenseGrid .stat span {
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#ExpenseGrid .stat strong {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111;
+}
+
+#ExpenseGrid .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+#ExpenseGrid .filter-bar input,
+#ExpenseGrid .filter-bar select {
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 13px;
+    background: #fff;
+    color: #111;
+    outline: none;
+}
+
+#ExpenseGrid .filter-bar input:focus,
+#ExpenseGrid .filter-bar select:focus {
+    border-color: #aaa;
+}
+
+#ExpenseGrid .filter-bar button {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    font-size: 12px;
+    cursor: pointer;
+    color: #555;
+}
+
+#ExpenseGrid .filter-bar button:hover {
+    background: #f0f0f0;
+}
+
+#ExpenseGrid .filter-count {
+    margin-left: auto;
+    font-size: 12px;
+    color: #888;
+}
+
+#ExpenseGrid table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+#ExpenseGrid thead th {
+    text-align: left;
+    font-weight: 500;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #888;
+    padding: 6px 8px;
+    border-bottom: 1px solid #e0e0e0;
+    white-space: nowrap;
+}
+
+#ExpenseGrid tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+#ExpenseGrid tbody tr:hover {
+    background: #fafafa;
+}
+
+#ExpenseGrid tbody td {
+    padding: 4px 6px;
+    vertical-align: middle;
+}
+
+#ExpenseGrid tbody td input,
+#ExpenseGrid tbody td select {
+    width: 100%;
+    padding: 4px 6px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 13px;
+    background: transparent;
+    color: #111;
+    outline: none;
+    font-family: inherit;
+}
+
+#ExpenseGrid tbody td input:hover,
+#ExpenseGrid tbody td select:hover {
+    border-color: #ddd;
+}
+
+#ExpenseGrid tbody td input:focus,
+#ExpenseGrid tbody td select:focus {
+    border-color: #bbb;
+    background: #fff;
+}
+
+#ExpenseGrid tbody td input[type="number"] {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+#ExpenseGrid tbody td button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #bbb;
+    font-size: 14px;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+#ExpenseGrid tbody td button:hover {
+    color: #e55;
+    background: #fff0f0;
+}
+
+#ExpenseGrid .addMerchantBtn,
+#ExpenseGrid .addCategoryBtn {
+    display: inline-block;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+    background: #fff8e1;
+    border: 1px solid #ffe082;
+    color: #b8860b;
+}
+
+#ExpenseGrid .addMerchantBtn:hover,
+#ExpenseGrid .addCategoryBtn:hover {
+    background: #fff3cd;
+}
+#ExpenseGrid tbody td {
+    padding: 4px 6px;
+    vertical-align: middle;
+    overflow: visible;  /* allow dropdown to escape */
+    white-space: nowrap;
+    max-width: 160px;
+}
+#ExpenseGrid .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 1rem 0 0;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 0.5rem;
+}
+
+#ExpenseGrid .actions button {
+    padding: 7px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #111;
+}
+
+#ExpenseGrid .actions button:last-child {
+    background: #111;
+    color: #fff;
+    border-color: transparent;
+}
+
+#ExpenseGrid .actions button:hover {
+    opacity: 0.85;
+}

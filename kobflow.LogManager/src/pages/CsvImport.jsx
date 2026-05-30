@@ -24,16 +24,21 @@ function CsvImport(props)
     }
 
     const handleConfirm = async () => {
-        await fetch('/api/bulk-insert-expenses', {
-            method: 'POST',
-            body: JSON.stringify(expenses)
-        })
+        const data = await  kCourrier.post(`${configs.VITE_URL_IMPORTSERVICE_BASE}/bulk-insert-expenses`, {expenses});
+       
+        console.log("bulk insert result:", data)
         setStage('done')
     }
 
         return(
+              
              <div id="CsvImport">
-                <div onClick={()=>setStage("input")}>restart</div>
+                <nav className="stage-nav">
+                    <div onClick={()=>setStage("input")    }  className={`stage ${stage=="input"?"active":"non-active"}`}>1. Input</div>
+                    <div onClick={()=>setStage("review")    } className={`stage ${stage=="review"?"active":"non-active"}`}>2. Review</div>
+                    <div onClick={()=>setStage("done")    } className={`stage ${stage=="done"?"active":"non-active"}`}>3. Done</div>
+                </nav>
+                
                 <div className={`page ${stage=="input"?"active":"non-active"}`}>
                     <DropZone content={csvText} onChange={setCsvText}></DropZone>       
                     <div className="submitBtn" onClick={handleParse}>submit</div>
@@ -41,7 +46,8 @@ function CsvImport(props)
                 <div className={`page ${stage=="review"?"active":"non-active"}`}>
                      <ExpenseGrid expenses= {expenses}
                           onExpensesChange={setExpenses} 
-                             onConfirm={handleConfirm}/>
+                             onConfirm={handleConfirm}
+                            configs={configs} />
                     
                 </div>
             </div>
