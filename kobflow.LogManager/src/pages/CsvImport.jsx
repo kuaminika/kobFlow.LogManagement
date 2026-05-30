@@ -9,6 +9,11 @@ function CsvImport(props)
     const [csvText, setCsvText] = useState('temp')
     const [expenses, setExpenses] = useState([])  // what comes back from parse
     const [stage, setStage] = useState('input')   // 'input' | 'review' | 'done'
+    const [kobHolder, setKobHolder] = useState({                        "id": -1,
+                        "name": "unkown account",
+                        "ownerId": -1
+                    }) ;
+    const [kobHolders, setKobHolders] = useState([]) ;
 
     console.log("CSVImport loading")
     const handleParse = async () => {
@@ -23,7 +28,15 @@ function CsvImport(props)
         setStage('review')
     }
 
+    useEffect(() => {
+        props.kobHolderLoader.Load().then(data => setKobHolders(data))
+            .catch(err => console.error('Failed to fetch kobHolders:', err, configs.VITE_URL_KOBHOLDER));
+       
+    }, []); // empty array = runs once on mount
+
     const handleConfirm = async () => {
+        expenses.forEach(e=>e.kobHolderId = kobHolder.id);
+
         const data = await  kCourrier.post(`${configs.VITE_URL_IMPORTSERVICE_BASE}/bulk-insert-expenses`, {expenses});
        
         console.log("bulk insert result:", data)
@@ -40,14 +53,21 @@ function CsvImport(props)
                 </nav>
                 
                 <div className={`page ${stage=="input"?"active":"non-active"}`}>
+                    <select onChange={e=>setKobHolder(JSON.parse(e.target.value))} value={JSON.stringify(kobHolder)}>
+                        <option value={JSON.stringify({id:-1,name:"unkown account",ownerId:-1})}>Select kobHolder</option>
+                        {kobHolders?.map(kh=> <option key={kh.id} value={JSON.stringify(kh)}>{kh.name}</option>)}
+                    </select>
                     <DropZone content={csvText} onChange={setCsvText}></DropZone>       
                     <div className="submitBtn" onClick={handleParse}>submit</div>
                 </div>
                 <div className={`page ${stage=="review"?"active":"non-active"}`}>
                      <ExpenseGrid expenses= {expenses}
                           onExpensesChange={setExpenses} 
+                          kobHolder={kobHolder}
                              onConfirm={handleConfirm}
-                            configs={configs} />
+                            configs={configs}
+                            merchantLoader = { props.merchantLoader}
+                            expenseCategoryLoader = { props.expenseCategoryLoader} />
                     
                 </div>
             </div>

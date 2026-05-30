@@ -22,3 +22,12 @@
     margin: 0;
     padding: 0;
 }
+
+.typeahead ul li {
+    padding: 4px 8px;
+    cursor: pointer;
+}
+.typeahead ul li.highlighted,
+.typeahead ul li:hover {
+    background: #eee;
+}

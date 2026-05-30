@@ -3,7 +3,7 @@ import {kCourrier} from "./../utils/Kourrier";
 import Typeahead from "./Typeahead";
 import "./ExpenseGrid.css";
 function ExpenseGrid(props) {
-    const { expenses, onExpensesChange, kobHolderName, onConfirm, onCancel, configs } = props;
+    const { expenses, onExpensesChange, kobHolder, onConfirm, onCancel, configs,merchantLoader,expenseCategoryLoader } = props;
 
     const [filters, setFilters] = useState({
         type: 'All',
@@ -15,7 +15,7 @@ function ExpenseGrid(props) {
 
     function createMap(items) {
         const map = {};
-        items.forEach(i => map[i.name] = i);
+        items?.forEach(i => map[i.name] = i);
         return map;
     }
     const [merchants, setMerchants] = useState([]);
@@ -23,13 +23,11 @@ function ExpenseGrid(props) {
     const merchantMap = createMap(merchants); 
     const categoryMap = createMap(categories);
     useEffect(() => {
-        kCourrier.get(`${configs.VITE_URL_MERCHANT}`)
-            .then(data => setMerchants(data.subject))
-            .catch(err => console.error('Failed to fetch merchants:', err));
-
-        kCourrier.get(`${configs.VITE_URL_EXPENSE_CATEGORY}`)
-            .then(data => setCategories(data.subject))
-            .catch(err => console.error('Failed to fetch categories:', err));
+        merchantLoader.Load().then(data => setMerchants(data))
+            .catch(err => console.error('Failed to fetch merchants:', err, configs.VITE_URL_MERCHANT));
+        expenseCategoryLoader.Load().then(data => setCategories(data))
+            .catch(err => console.error('Failed to fetch categories:', err, configs.VITE_URL_EXPENSE_CATEGORY));
+   
     }, []); // empty array = runs once on mount
 
     function updateFilter(field, val) {
@@ -106,7 +104,7 @@ function ExpenseGrid(props) {
     return (
         <div id="ExpenseGrid">
             <div className="holder-bar">
-                Cardholder for all expenses: <strong>{kobHolderName}.   </strong>Total is : {total.toFixed(2)}
+                Cardholder for all expenses: <strong>{kobHolder?.name}.   </strong>Total is : {total.toFixed(2)}
             </div>
             
             <div className="summary-row">

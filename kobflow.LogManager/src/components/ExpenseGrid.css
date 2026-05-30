@@ -20,6 +20,9 @@
 
 #ExpenseGrid .summary-row {
     display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    
     gap: 12px;
     margin-bottom: 1rem;
 }
