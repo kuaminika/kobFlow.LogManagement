@@ -1,5 +1,5 @@
 import { useState,useEffect } from "react";
-function ManageList({ context, listLoader, onAdd, onEdit, onDelete }) {
+function ManageList({ context, listLoader/* onAdd, onEdit, onDelete*/ }) {
 
     const [query, setQuery] = useState("");
     const [editingId, setEditingId] = useState(null);
@@ -22,7 +22,18 @@ function ManageList({ context, listLoader, onAdd, onEdit, onDelete }) {
 
     function handleDelete(item) {
         if (window.confirm(`Are you sure you want to delete ${item.name}?`)) {
-            onDelete(item);
+            //onDelete(item);
+
+                console.log("will delete:",item);
+            listLoader.delete(item).then(response=>{
+                console.log("Deleted:",item);
+                console.log("Here's the response:",response);
+                
+                const updatedList = items.filter(i=>i.id !== item.id);
+                
+                setItems(updatedList);   
+
+            });
         }
     }
 
@@ -33,9 +44,22 @@ function ManageList({ context, listLoader, onAdd, onEdit, onDelete }) {
 
     function handleEditSave(item) {
         if (editingName.trim() && editingName !== item.name) {
-            onEdit({ ...item, name: editingName.trim() });
+
+            const updateToDo = { ...item, name: editingName.trim() };
+            //onEdit({ ...item, name: editingName.trim() });
+
+            listLoader.update(updateToDo).then(reponse=>{
+                console.log("This is the updated item",updateToDo);
+                console.log("the update is recorded:",reponse);
+                const updatedItem = reponse.subject;
+                const updatedList = items.map(i=>i.id === updatedItem.id?updatedItem:i);
+                
+                setItems(updatedList);      
+               setEditingId(null);          
+            });
         }
-        setEditingId(null);
+       else
+         setEditingId(null);
     }
 
     function handleEditKeyDown(e, item) {
@@ -45,9 +69,21 @@ function ManageList({ context, listLoader, onAdd, onEdit, onDelete }) {
 
     function handleAddSave() {
         if (newName.trim()) {
-            onAdd({ name: newName.trim() });
-            setNewName("");
-            setIsAdding(false);
+       //     onAdd({ name: newName.trim() });
+            listLoader.create({ name: newName.trim() }).then((newItem)=>{
+                console.log(`There are ${items.length} in the list`);
+                console.log("will now add:",newItem)
+                const updatedList = [...items,newItem];
+                 
+                console.log(`There will be  ${updatedList.length} in the list`);
+           
+                setNewName("");
+                setItems(updatedList);
+                setIsAdding(false);
+
+
+            });
+
         }
     }
 
@@ -106,7 +142,7 @@ function ManageList({ context, listLoader, onAdd, onEdit, onDelete }) {
                             <>
                                 <span>{item.name}</span>
                                 <button onClick={() => handleEditStart(item)}>Edit</button>
-                                <button onClick={() => onDelete(item)}>Delete</button>
+                                <button onClick={() => handleDelete(item)}>Delete</button>
                             </>
                         )}
                     </li>

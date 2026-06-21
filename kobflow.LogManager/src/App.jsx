@@ -7,15 +7,41 @@ import ListLoader from './utils/ListLoader'
 import KCaher from './utils/KCacher'
 import './App.css'
 
+
+function EndpointSet({ remove, create, update, list, genericEndpoint }) {
+    const self = this;
+
+    self.setGenericEndPoint = function(url) {
+        self.delete = url;
+        self.create = url;
+        self.update = url;
+        self.list = url;
+    };
+
+    if (genericEndpoint) self.setGenericEndPoint(genericEndpoint);
+
+    // specific values override the generic default, not the other way around
+    if (remove)  self.delete = remove;
+    if (create)  self.create = create;
+    if (update)  self.update = update;
+    if (list)    self.list   = list;
+}
+
+
 function App() {
       
 
   const configs ={...import.meta.env}
 
   const cacher = new KCaher();
-  const listLoader_kobHolder= new ListLoader({context:"KOBHOLDER",kCourrier, configs, cacher});
-  const listLoader_merchant= new ListLoader({context:"Merchant",kCourrier, configs, cacher});
-  const listLoader_expenseCategory= new ListLoader({context:"Expense_Category",kCourrier, configs, cacher});
+
+  const kobHoldeEndpointSet = new EndpointSet({list:configs["VITE_URL_MERCHANT"],remove: configs["VITE_URL_FORDELETE"],update:configs["VITE_URL_FORUPDATE"],create:configs["VITE_URL_FORADD"]});
+  const merchantEndpointSet = new EndpointSet({list:configs["VITE_URL_KOBHOLDER"],remove: configs["VITE_URL_FORDELETE"],update:configs["VITE_URL_FORUPDATE"],create:configs["VITE_URL_FORADD"]});
+  const expenseCategoryEndpointSet = new EndpointSet({list:configs["VITE_URL_EXPENSE_CATEGORY"],remove: configs["VITE_URL_FORDELETE"],update:configs["VITE_URL_FORUPDATE"],create:["VITE_URL_FORADD"]});
+
+  const listLoader_kobHolder= new ListLoader({context:"KOBHOLDER",kCourrier, endpoints: kobHoldeEndpointSet, cacher});
+  const listLoader_merchant= new ListLoader({context:"Merchant",kCourrier, endpoints:merchantEndpointSet , cacher});
+  const listLoader_expenseCategory= new ListLoader({context:"Expense_Category",kCourrier, endpoints:expenseCategoryEndpointSet , cacher});
 
   return (
     <BrowserRouter>
