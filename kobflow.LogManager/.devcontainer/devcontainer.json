@@ -1,0 +1,29 @@
+{
+  "name": "react-node-dev",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+
+  // Runs once when the container is created — installs deps automatically
+  "postCreateCommand": "npm install",
+
+  // Ports your apps will use — adjust to match your project
+  // (e.g. 5173 for Vite, 3000 for CRA/Express, 8080 for a custom server)
+  "forwardPorts": [3000, 5173],
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-typescript-next"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+
+  // Keeps the container running as the non-root "node" user (built into the node image)
+  "remoteUser": "node"
+}
