@@ -5,6 +5,7 @@ import "./CsvImport.css";
 function CsvImport(props)
 {
 
+    //TODO : need to display errors when transactions are failing 
     const {kCourrier,configs} = props;
     const [csvText, setCsvText] = useState('temp')
     const [expenses, setExpenses] = useState([])  // what comes back from parse
@@ -66,6 +67,7 @@ function CsvImport(props)
                           kobHolder={kobHolder}
                              onConfirm={handleConfirm}
                             configs={configs}
+                            kobHolderLoader = {props.kobHolderLoader}
                             merchantLoader = { props.merchantLoader}
                             expenseCategoryLoader = { props.expenseCategoryLoader} />
                     

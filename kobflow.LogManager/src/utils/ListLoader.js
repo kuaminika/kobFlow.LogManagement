@@ -22,7 +22,7 @@ function ListLoader({ context, kCourrier, endpoints, cacher }) {
             const url = endpoint || endpoints.list;
             if (!forceRefresh) {
                 const cacheHit = getCachedList();
-                if (cacheHit) {
+                if (cacheHit && cacheHit.length >0) {
                     console.log(`Cache hit for context ${context}:`, cacheHit);
                     return cacheHit;
                 }

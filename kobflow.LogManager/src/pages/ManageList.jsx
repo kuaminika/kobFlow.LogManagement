@@ -1,5 +1,6 @@
-import { useState,useEffect } from "react";
-function ManageList({ context, listLoader/* onAdd, onEdit, onDelete*/ }) {
+import { useState, useEffect } from "react";
+
+function ManageList({ context, listLoader /* onAdd, onEdit, onDelete*/ }) {
 
     const [query, setQuery] = useState("");
     const [editingId, setEditingId] = useState(null);
@@ -8,32 +9,61 @@ function ManageList({ context, listLoader/* onAdd, onEdit, onDelete*/ }) {
     const [isAdding, setIsAdding] = useState(false);
     const [items, setItems] = useState([]);
 
+    // --- new: loading state tracking ---
+    const [isLoading, setIsLoading] = useState(true);      // initial list load
+    const [isSaving, setIsSaving] = useState(false);        // add / edit save in flight
+    const [pendingIds, setPendingIds] = useState(new Set()); // ids currently being deleted/edited
+
     useEffect(() => {
+        let cancelled = false;
+        setIsLoading(true);
         const loadItems = async () => {
-            const loadedItems = await listLoader.Load();
-            setItems(loadedItems);
+            try {
+                const loadedItems = await listLoader.Load();
+                if (!cancelled) setItems(loadedItems);
+            } catch (err) {
+                console.error("Failed to load items:", err);
+            } finally {
+                if (!cancelled) setIsLoading(false);
+            }
         };
         loadItems();
+        return () => { cancelled = true; };
     }, [listLoader]);
 
     const filtered = items.filter(item =>
         item.name.toLowerCase().includes(query.toLowerCase())
     );
 
+    function addPending(id) {
+        setPendingIds(prev => new Set(prev).add(id));
+    }
+
+    function removePending(id) {
+        setPendingIds(prev => {
+            const next = new Set(prev);
+            next.delete(id);
+            return next;
+        });
+    }
+
     function handleDelete(item) {
         if (window.confirm(`Are you sure you want to delete ${item.name}?`)) {
-            //onDelete(item);
+            addPending(item.id);
+            listLoader.delete(item)
+                .then(response => {
+                    console.log("Deleted:", item);
+                    console.log("Here's the response:", response);
 
-                console.log("will delete:",item);
-            listLoader.delete(item).then(response=>{
-                console.log("Deleted:",item);
-                console.log("Here's the response:",response);
-                
-                const updatedList = items.filter(i=>i.id !== item.id);
-                
-                setItems(updatedList);   
-
-            });
+                    const updatedList = items.filter(i => i.id !== item.id);
+                    setItems(updatedList);
+                })
+                .catch(err => {
+                    console.error("Failed to delete item:", err);
+                })
+                .finally(() => {
+                    removePending(item.id);
+                });
         }
     }
 
@@ -46,20 +76,30 @@ function ManageList({ context, listLoader/* onAdd, onEdit, onDelete*/ }) {
         if (editingName.trim() && editingName !== item.name) {
 
             const updateToDo = { ...item, name: editingName.trim() };
-            //onEdit({ ...item, name: editingName.trim() });
 
-            listLoader.update(updateToDo).then(reponse=>{
-                console.log("This is the updated item",updateToDo);
-                console.log("the update is recorded:",reponse);
-                const updatedItem = reponse.subject;
-                const updatedList = items.map(i=>i.id === updatedItem.id?updatedItem:i);
-                
-                setItems(updatedList);      
-               setEditingId(null);          
-            });
+            setIsSaving(true);
+            addPending(item.id);
+
+            listLoader.update(updateToDo)
+                .then(response => {
+                    console.log("This is the updated item", updateToDo);
+                    console.log("the update is recorded:", response);
+                    const updatedItem = response.subject;
+                    const updatedList = items.map(i => i.id === updatedItem.id ? updatedItem : i);
+
+                    setItems(updatedList);
+                    setEditingId(null);
+                })
+                .catch(err => {
+                    console.error("Failed to update item:", err);
+                })
+                .finally(() => {
+                    setIsSaving(false);
+                    removePending(item.id);
+                });
+        } else {
+            setEditingId(null);
         }
-       else
-         setEditingId(null);
     }
 
     function handleEditKeyDown(e, item) {
@@ -69,21 +109,25 @@ function ManageList({ context, listLoader/* onAdd, onEdit, onDelete*/ }) {
 
     function handleAddSave() {
         if (newName.trim()) {
-       //     onAdd({ name: newName.trim() });
-            listLoader.create({ name: newName.trim() }).then((newItem)=>{
-                console.log(`There are ${items.length} in the list`);
-                console.log("will now add:",newItem)
-                const updatedList = [...items,newItem];
-                 
-                console.log(`There will be  ${updatedList.length} in the list`);
-           
-                setNewName("");
-                setItems(updatedList);
-                setIsAdding(false);
+            setIsSaving(true);
+            listLoader.create({ name: newName.trim() })
+                .then((newItem) => {
+                    console.log(`There are ${items.length} in the list`);
+                    console.log("will now add:", newItem);
+                    const updatedList = [...items, newItem];
 
+                    console.log(`There will be  ${updatedList.length} in the list`);
 
-            });
-
+                    setNewName("");
+                    setItems(updatedList);
+                    setIsAdding(false);
+                })
+                .catch(err => {
+                    console.error("Failed to add item:", err);
+                })
+                .finally(() => {
+                    setIsSaving(false);
+                });
         }
     }
 
@@ -102,56 +146,81 @@ function ManageList({ context, listLoader/* onAdd, onEdit, onDelete*/ }) {
                     placeholder={`Search ${context}...`}
                     value={query}
                     onChange={e => setQuery(e.target.value)}
+                    disabled={isLoading}
                 />
-                <button onClick={() => setIsAdding(true)} disabled={isAdding}>
+                <button onClick={() => setIsAdding(true)} disabled={isAdding || isLoading}>
                     + Add
                 </button>
             </div>
 
-            <ul className="manage-list__items">
-                {isAdding && (
-                    <li className="manage-list__item manage-list__item--new">
-                        <input
-                            autoFocus
-                            type="text"
-                            value={newName}
-                            placeholder={`New ${context} name...`}
-                            onChange={e => setNewName(e.target.value)}
-                            onKeyDown={handleAddKeyDown}
-                        />
-                        <button onClick={handleAddSave}>Save</button>
-                        <button onClick={() => { setIsAdding(false); setNewName(""); }}>Cancel</button>
-                    </li>
-                )}
+            {isLoading ? (
+                <p className="manage-list__loading">Loading {context}…</p>
+            ) : (
+                <ul className="manage-list__items">
+                    {isAdding && (
+                        <li className="manage-list__item manage-list__item--new">
+                            <input
+                                autoFocus
+                                type="text"
+                                value={newName}
+                                placeholder={`New ${context} name...`}
+                                onChange={e => setNewName(e.target.value)}
+                                onKeyDown={handleAddKeyDown}
+                                disabled={isSaving}
+                            />
+                            <button onClick={handleAddSave} disabled={isSaving}>
+                                {isSaving ? "Saving…" : "Save"}
+                            </button>
+                            <button
+                                onClick={() => { setIsAdding(false); setNewName(""); }}
+                                disabled={isSaving}
+                            >
+                                Cancel
+                            </button>
+                        </li>
+                    )}
 
-                {filtered.map(item => (
-                    <li key={item.id} className="manage-list__item">
-                        {editingId === item.id ? (
-                            <>
-                                <input
-                                    autoFocus
-                                    type="text"
-                                    value={editingName}
-                                    onChange={e => setEditingName(e.target.value)}
-                                    onKeyDown={e => handleEditKeyDown(e, item)}
-                                />
-                                <button onClick={() => handleEditSave(item)}>Save</button>
-                                <button onClick={() => setEditingId(null)}>Cancel</button>
-                            </>
-                        ) : (
-                            <>
-                                <span>{item.name}</span>
-                                <button onClick={() => handleEditStart(item)}>Edit</button>
-                                <button onClick={() => handleDelete(item)}>Delete</button>
-                            </>
-                        )}
-                    </li>
-                ))}
+                    {filtered.map(item => {
+                        const isPending = pendingIds.has(item.id);
+                        return (
+                            <li key={item.id} className="manage-list__item">
+                                {editingId === item.id ? (
+                                    <>
+                                        <input
+                                            autoFocus
+                                            type="text"
+                                            value={editingName}
+                                            onChange={e => setEditingName(e.target.value)}
+                                            onKeyDown={e => handleEditKeyDown(e, item)}
+                                            disabled={isPending}
+                                        />
+                                        <button onClick={() => handleEditSave(item)} disabled={isPending}>
+                                            {isPending ? "Saving…" : "Save"}
+                                        </button>
+                                        <button onClick={() => setEditingId(null)} disabled={isPending}>
+                                            Cancel
+                                        </button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <span>{item.name}</span>
+                                        <button onClick={() => handleEditStart(item)} disabled={isPending}>
+                                            Edit
+                                        </button>
+                                        <button onClick={() => handleDelete(item)} disabled={isPending}>
+                                            {isPending ? "Deleting…" : "Delete"}
+                                        </button>
+                                    </>
+                                )}
+                            </li>
+                        );
+                    })}
 
-                {filtered.length === 0 && !isAdding && (
-                    <li className="manage-list__empty">No results for "{query}"</li>
-                )}
-            </ul>
+                    {filtered.length === 0 && !isAdding && (
+                        <li className="manage-list__empty">No results for "{query}"</li>
+                    )}
+                </ul>
+            )}
         </div>
     );
 }

@@ -1,7 +1,7 @@
 function KCacher() {
 
     const self = this;
-
+//TODO: make sure that there is expiration
 
     self.get = function(key) {
         try {
