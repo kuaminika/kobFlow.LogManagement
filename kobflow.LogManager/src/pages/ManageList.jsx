@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function ManageList({ context, listLoader /* onAdd, onEdit, onDelete*/ }) {
+function ManageList({ context, listLoader  }) {
 
     const [query, setQuery] = useState("");
     const [editingId, setEditingId] = useState(null);

@@ -49,7 +49,8 @@ function App() {
   const listLoader_expenseCategory= new ListLoader({context:"ExpenseCategory",kCourrier, endpoints:expenseCategoryEndpointSet , cacher});
 
   
-
+//TODO: need to make sure that there is a page to manage expenses
+//TODO: need to make sure that there is a page to manage mappings. 
 
 
   return (
@@ -57,8 +58,8 @@ function App() {
       <nav>
         <Link to="/">Logs</Link>|
         <Link to="/import">CSV Import</Link>|
-        <Link to="/ManageMerchants">Manage Merchants</Link>| 
-        <Link to="/ManageCategories">Manage Categories</Link>
+        <Link to="/ManageExpenses">Manage Categories</Link>
+        <Link to="/ManageMerchants">Manage Merchants</Link>|  
       </nav>
       <Routes>
         <Route path="/" element={<LogDashBoard />} />
