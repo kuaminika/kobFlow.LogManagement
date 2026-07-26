@@ -5,7 +5,7 @@ import LoadExpenseCommand from "../utils/manageExpenseCommands/LoadExpenseComman
 import AddExpenseCommand from "../utils/manageExpenseCommands/AddExpenseCommand";
  import UpdateExpenseCommand from "../utils/manageExpenseCommands/UpdateExpenseCommand"
 import DeleteExpenseCommand from "../utils/manageExpenseCommands/DeleteExpenseCommand"
- 
+ import "./ManageExpenseList.css"; // adjust path to wherever you save it
 function ManageExpenseList({ context, listLoaders }) {
 
 
