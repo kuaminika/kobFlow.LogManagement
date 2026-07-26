@@ -4,9 +4,8 @@ import Expense from "../models/Expense";
 import LoadExpenseCommand from "../utils/manageExpenseCommands/LoadExpenseCommand";
 import AddExpenseCommand from "../utils/manageExpenseCommands/AddExpenseCommand";
  import UpdateExpenseCommand from "../utils/manageExpenseCommands/UpdateExpenseCommand"
-import HandleAddCommand from "../utils/manageListCommands/HandleAddCommand";
-import HandleDeleteCommand from "../utils/manageListCommands/HandleDeleteCommand";
-
+import DeleteExpenseCommand from "../utils/manageExpenseCommands/DeleteExpenseCommand"
+ 
 function ManageExpenseList({ context, listLoaders }) {
 
 
@@ -14,7 +13,10 @@ function ManageExpenseList({ context, listLoaders }) {
    
     const { listLoader_expenseCategory, listLoader_expense, listLoader_kobHolder, listLoader_merchant } = listLoaders;
     const addCommand = new AddExpenseCommand({listLoader:listLoader_expense})
-      const updateCommand = new UpdateExpenseCommand({listLoader_expense})
+    const updateCommand = new UpdateExpenseCommand({listLoader_expense})
+    const deleteCommand = new DeleteExpenseCommand({listLoader: listLoader_expense });
+
+
     const [items, setItems] = useState([]);
     const [merchants, setMerchants] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -66,10 +68,7 @@ function ManageExpenseList({ context, listLoaders }) {
 
 
 
-    const deleteCommand = new HandleDeleteCommand({
-        listLoader: listLoader_expense,
-        stateFns: { setItems, addPending, removePending }
-    });
+
 
     const filtered = items.filter(item => {
         const q = query.toLowerCase();
@@ -309,7 +308,7 @@ function ManageExpenseList({ context, listLoaders }) {
                                                 <button onClick={() => handleEditStart(item)} disabled={isPending}>
                                                     Edit
                                                 </button>
-                                                <button onClick={() => deleteCommand.execute(item)} disabled={isPending}>
+                                                <button onClick={() => deleteCommand.execute({item,stateFns: { setItems, addPending, removePending },confirmFn:window.confirm})} disabled={isPending}>
                                                     {isPending ? "Deleting…" : "Delete"}
                                                 </button>
                                             </td>
