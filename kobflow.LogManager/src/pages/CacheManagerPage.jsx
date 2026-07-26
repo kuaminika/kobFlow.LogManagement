@@ -1,11 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
 import { Trash2, RefreshCw, AlertTriangle, Database } from "lucide-react";
- 
+import KCacher from "../utils/KCacher"; // adjust path to wherever KCacher.js actually lives
+
+const cacher = new KCacher();
+
 function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} B`;
   return `${(bytes / 1024).toFixed(1)} KB`;
 }
- 
+
 function formatExpiry(expiry, expired) {
   if (expiry === null) return "No expiration";
   if (expired) return "Expired";
@@ -16,19 +19,31 @@ function formatExpiry(expiry, expired) {
   const hrsLeft = Math.round(minsLeft / 60);
   return `Expires in ${hrsLeft} hr`;
 }
-export default function CacheManagerPage({cacher}) {
+
+export default function CacheManagerPage() {
   const [entries, setEntries] = useState([]);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [lastAction, setLastAction] = useState(null);
- 
+  const [ttlHours, setTtlHours] = useState(
+    typeof cacher.getDefaultTTL_Hours === "function" ? cacher.getDefaultTTL_Hours() : 90 / 60
+  );
+
   const refresh = useCallback(() => {
     setEntries(cacher.listEntries());
   }, []);
- 
+
+  const handleTtlChange = (e) => {
+    const hours = parseFloat(e.target.value);
+    setTtlHours(e.target.value);
+    if (!Number.isNaN(hours) && hours > 0) {
+      cacher.setDefaultTTL_Hours(hours);
+    }
+  };
+
   useEffect(() => {
     refresh();
   }, [refresh]);
- 
+
   const handleClearAll = () => {
     cacher.clearCache();
     refresh();
@@ -36,17 +51,17 @@ export default function CacheManagerPage({cacher}) {
     setLastAction("Cache cleared");
     setTimeout(() => setLastAction(null), 2500);
   };
- 
+
   const handleRemoveOne = (key) => {
     cacher.remove(key);
     refresh();
     setLastAction(`Removed "${key}"`);
     setTimeout(() => setLastAction(null), 2500);
   };
- 
+
   const totalBytes = entries.reduce((sum, e) => sum + e.sizeBytes, 0);
   const expiredCount = entries.filter((e) => e.expired).length;
- 
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 font-mono">
       <div className="max-w-2xl mx-auto px-6 py-12">
@@ -66,7 +81,7 @@ export default function CacheManagerPage({cacher}) {
             Refresh
           </button>
         </div>
- 
+
         {/* Stats bar */}
         <div className="grid grid-cols-3 gap-px bg-slate-800 rounded-lg overflow-hidden mb-6 border border-slate-800">
           <div className="bg-slate-950 px-4 py-3">
@@ -84,7 +99,26 @@ export default function CacheManagerPage({cacher}) {
             </div>
           </div>
         </div>
- 
+
+        {/* Default TTL control */}
+        <div className="flex items-center justify-between border border-slate-800 rounded-lg px-4 py-3 mb-6">
+          <label htmlFor="ttl-hours" className="text-sm text-slate-400">
+            Default TTL for new entries
+          </label>
+          <div className="flex items-center gap-2">
+            <input
+              id="ttl-hours"
+              type="number"
+              min="0.01"
+              step="0.5"
+              value={ttlHours}
+              onChange={handleTtlChange}
+              className="w-20 bg-slate-900 border border-slate-800 rounded-md px-2 py-1 text-sm text-slate-200 text-right focus:outline-none focus:border-emerald-600"
+            />
+            <span className="text-sm text-slate-500">hr</span>
+          </div>
+        </div>
+
         {/* Entry list */}
         <div className="border border-slate-800 rounded-lg overflow-hidden mb-6">
           {entries.length === 0 ? (
@@ -120,7 +154,7 @@ export default function CacheManagerPage({cacher}) {
             ))
           )}
         </div>
- 
+
         {/* Clear all */}
         {!confirmOpen ? (
           <button
@@ -156,7 +190,7 @@ export default function CacheManagerPage({cacher}) {
             </div>
           </div>
         )}
- 
+
         {/* Toast */}
         {lastAction && (
           <div className="mt-4 text-xs text-emerald-400 text-center">{lastAction}</div>
@@ -165,5 +199,3 @@ export default function CacheManagerPage({cacher}) {
     </div>
   );
 }
-
- 

@@ -3,13 +3,13 @@ function KCacher() {
     const self = this;
 
     const INDEX_KEY = "__kcacher_index__";
-    const DEFAULT_TTL_MS = 90 * 60 * 1000; 
+    let DEFAULT_TTL_MS = 90 * 60 * 1000; 
 
     // --- internal helpers ---
 
     function loadIndex() {
         try {
-            console.log(INDEX_KEY,localStorage)
+         
             const raw = localStorage.getItem(INDEX_KEY);
             return raw ? JSON.parse(raw) : [];
         } catch (err) {
@@ -40,10 +40,14 @@ function KCacher() {
     }
 
     // --- public API ---
+    self.setDefaultTTL_Hours = function(hours)
+    {
+        DEFAULT_TTL_MS = hours *60 * 60 * 1000; 
 
+    }
     self.get = function(key) {
         try {
-            key = `${INDEX_KEY}${key}`;
+         
             const cached = localStorage.getItem(key);
             if (!cached) return null;
 
@@ -71,8 +75,7 @@ function KCacher() {
     
     self.listEntries = function () {
         const keys = loadIndex();
-
-        console.log("keys",keys)
+ 
         const now = Date.now();
         return keys
         .map((key) => {
@@ -99,7 +102,7 @@ function KCacher() {
     };
     self.set = function(key, value, ttlMs = DEFAULT_TTL_MS) {
         try {
-            key = `${INDEX_KEY}${key}`;
+          
             if (value === undefined || value === "undefined") {
                 console.warn(`Attempting to cache undefined value for key ${key}. This will not be cached.`);
                 return;
