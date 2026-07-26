@@ -134,10 +134,10 @@ function ManageExpenseList({ context, listLoaders }) {
     }
 
     return (
-        <div className="manage-list">
+        <div className="expense-table">
             <h2>Manage {context}</h2>
 
-            <div className="manage-list__toolbar">
+            <div className="expense-table__toolbar">
                 <input
                     type="text"
                     placeholder={`Search ${context}...`}
@@ -151,9 +151,9 @@ function ManageExpenseList({ context, listLoaders }) {
             </div>
 
             {isLoading ? (
-                <p className="manage-list__loading">Loading {context}…</p>
+                <p className="expense-table__loading">Loading {context}…</p>
             ) : (
-                <table className="manage-list__table">
+                <table className="expense-table__table">
                     <thead>
                         <tr>
                             <th>Date</th>
@@ -167,7 +167,7 @@ function ManageExpenseList({ context, listLoaders }) {
                     </thead>
                     <tbody>
                         {isAdding && (
-                            <tr className="manage-list__item manage-list__item--new">
+                            <tr className="expense-table__item expense-table__item--new">
                                 <td>
                                     <input
                                         type="date"
@@ -234,7 +234,7 @@ function ManageExpenseList({ context, listLoaders }) {
                             const isPending = pendingIds.has(item.id);
                             const isEditing = editingId === item.id;
                             return (
-                                <tr key={item.id} className="manage-list__item">
+                                <tr key={item.id} className="expense-table__item">
                                     {isEditing ? (
                                         <>
                                             <td>
@@ -320,7 +320,7 @@ function ManageExpenseList({ context, listLoaders }) {
 
                         {filtered.length === 0 && !isAdding && (
                             <tr>
-                                <td colSpan={7} className="manage-list__empty">No results for "{query}"</td>
+                                <td colSpan={7} className="expense-table__empty">No results for "{query}"</td>
                             </tr>
                         )}
                     </tbody>
