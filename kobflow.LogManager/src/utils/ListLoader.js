@@ -18,7 +18,7 @@ function ListLoader({ context, kCourrier, endpoints, cacher }) {
 
     self.Load = async function({ forceRefresh = false, endpoint } = {}) {
         try {
-            console.log("endpoints:",endpoints)
+            console.log(`Endpoint for set ${context}`,endpoints)
             const url = endpoint || endpoints.list;
             if (!forceRefresh) {
                 const cacheHit = getCachedList();
