@@ -58,14 +58,16 @@ function App() {
       <nav>
         <Link to="/">Logs</Link>|
         <Link to="/import">CSV Import</Link>|
-        <Link to="/ManageExpenses">Manage Categories</Link>
+        <Link to="/ManageCategories">Manage Categories</Link>
         <Link to="/ManageMerchants">Manage Merchants</Link>|  
+        <Link to="/ManageMerchants">Manage Expenses</Link>|  
       </nav>
       <Routes>
         <Route path="/" element={<LogDashBoard />} />
         <Route path="/import" element={<CsvImport kCourrier={kCourrier} configs= {configs} kobHolderLoader={listLoader_kobHolder} merchantLoader={listLoader_merchant} expenseCategoryLoader={listLoader_expenseCategory} />} />
         <Route path="/ManageMerchants" element={<ManageList context="Merchants" listLoader={listLoader_merchant} />} />
         <Route path="/ManageCategories" element={<ManageList context="Categories" listLoader={listLoader_expenseCategory} />} />
+        <Route path="/ManageExpenses" element={<ManageList context="Expenses" listLoader={listLoader_expenseCategory} />} />
       </Routes>
     </BrowserRouter>
   )
