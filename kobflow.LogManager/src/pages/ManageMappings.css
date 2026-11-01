@@ -1,0 +1,167 @@
+.mappings {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+.mappings__layout {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+/* Left column: merchants */
+.mappings__targets {
+    width: 280px;
+    flex-shrink: 0;
+    border-right: 1px solid #ddd;
+    padding-right: 16px;
+}
+
+.mappings__targets input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+    margin-bottom: 8px;
+}
+
+.mappings__targets ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.mappings__target {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 8px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+}
+
+.mappings__target:hover {
+    background: #f2f2f8;
+}
+
+.mappings__target--selected {
+    background: #e6e6fa;
+    font-weight: 600;
+}
+
+.mappings__count {
+    font-size: 0.8em;
+    color: #777;
+    min-width: 1.5em;
+    text-align: right;
+}
+
+/* Right column: phrases */
+.mappings__phrases {
+    flex: 1;
+    min-width: 0;
+}
+
+.mappings__phrases-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mappings__phrases-header h3 {
+    margin: 0;
+}
+
+.mappings__add {
+    width: 32px;
+    height: 32px;
+    padding: 0;                  /* cancels the global button padding */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid #646cff;
+    background: white;
+    color: #646cff;
+    font-size: 1.2em;
+    line-height: 1;
+    cursor: pointer;
+}
+.mappings__add:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.mappings__new {
+    display: flex;
+    gap: 8px;
+    margin: 12px 0;
+}
+
+.mappings__new input {
+    flex: 1;
+    padding: 8px;
+}
+
+.mappings__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.mappings__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 6px 6px 12px;
+    border: 1px solid #999;
+    border-radius: 6px;
+    background: white;
+    font-family: monospace;
+}
+
+.mappings__chip--pending {
+    opacity: 0.5;
+}
+
+.mappings__chip-remove {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid #c33;
+    background: white;
+    color: #c33;
+    line-height: 1;
+    padding: 0;
+    cursor: pointer;
+}
+
+.mappings__hint {
+    color: #777;
+    font-size: 0.9em;
+}
+
+.mappings__error {
+    color: #c33;
+}
+
+/* Stack the columns on narrow screens */
+@media (max-width: 700px) {
+    .mappings__layout {
+        flex-direction: column;
+    }
+
+    .mappings__targets {
+        width: 100%;
+        border-right: none;
+        padding-right: 0;
+    }
+}
