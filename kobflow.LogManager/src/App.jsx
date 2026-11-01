@@ -3,6 +3,9 @@ import { LogDashBoard } from './pages/LogDashBoard'
 import { CsvImport } from './pages/CsvImport'
 import { kCourrier } from './utils/Kourrier'
 import ManageList from './pages/ManageList'
+import ManageExpenseList from './pages/ManageExpenseList'
+import ManageMappings from './pages/ManageMappings'
+import CacheManagerPage from './pages/CacheManagerPage'
 import ListLoader from './utils/ListLoader'
 import KCaher from './utils/KCacher'
 import './App.css'
@@ -60,14 +63,18 @@ function App() {
         <Link to="/import">CSV Import</Link>|
         <Link to="/ManageCategories">Manage Categories</Link>
         <Link to="/ManageMerchants">Manage Merchants</Link>|  
-        <Link to="/ManageMerchants">Manage Expenses</Link>|  
+        <Link to="/KobHolders">Kob holders</Link>|
+        <Link to="/ManageExpenses">Manage Expenses</Link>|  
+        <Link to="/ManageMerchantMappings">Manage Merchant Mappings</Link>
       </nav>
       <Routes>
         <Route path="/" element={<LogDashBoard />} />
         <Route path="/import" element={<CsvImport kCourrier={kCourrier} configs= {configs} kobHolderLoader={listLoader_kobHolder} merchantLoader={listLoader_merchant} expenseCategoryLoader={listLoader_expenseCategory} />} />
         <Route path="/ManageMerchants" element={<ManageList context="Merchants" listLoader={listLoader_merchant} />} />
         <Route path="/ManageCategories" element={<ManageList context="Categories" listLoader={listLoader_expenseCategory} />} />
-        <Route path="/ManageExpenses" element={<ManageList context="Expenses" listLoader={listLoader_expenseCategory} />} />
+        <Route path="/ManageExpenses" element={<ManageExpenseList context="Expenses" listLoaders={allListHolders} />} />
+        <Route path="/CacheManager" element={<CacheManagerPage cacher={cacher}/>} />
+        <Route path="/ManageMerchantMappings" element={<ManageMappings />} />
       </Routes>
     </BrowserRouter>
   )
