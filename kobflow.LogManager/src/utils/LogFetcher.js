@@ -6,11 +6,13 @@ function LogFetcher()
 {
         const self = this;
        
-
+        console.log("loading LogFetcher")
         self.GetAllLogs = async function(){
 
          
                 let url =  import.meta.env.VITE_URL_GETLOGS;
+
+                console.log(`fetching logs at ${url}`);
             const result = await    kCourrier.get(url).then(r=>{
               if(!r.success) throw "was not able to fetch";
 

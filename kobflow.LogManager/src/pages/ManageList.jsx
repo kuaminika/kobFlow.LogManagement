@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import "./ManageList.css"
+
 
 function ManageList({ context, listLoader  }) {
 
@@ -137,10 +139,10 @@ function ManageList({ context, listLoader  }) {
     }
 
     return (
-        <div className="manage-list">
+        <div className="simple-list">
             <h2>Manage {context}</h2>
 
-            <div className="manage-list__toolbar">
+            <div className="simple-list__toolbar">
                 <input
                     type="text"
                     placeholder={`Search ${context}...`}
@@ -154,11 +156,11 @@ function ManageList({ context, listLoader  }) {
             </div>
 
             {isLoading ? (
-                <p className="manage-list__loading">Loading {context}…</p>
+                <p className="simple-list__loading">Loading {context}…</p>
             ) : (
-                <ul className="manage-list__items">
+                <ul className="simple-list__items">
                     {isAdding && (
-                        <li className="manage-list__item manage-list__item--new">
+                        <li className="simple-list__item simple-list__item--new">
                             <input
                                 autoFocus
                                 type="text"
@@ -183,7 +185,7 @@ function ManageList({ context, listLoader  }) {
                     {filtered.map(item => {
                         const isPending = pendingIds.has(item.id);
                         return (
-                            <li key={item.id} className="manage-list__item">
+                            <li key={item.id} className="simple-list__item">
                                 {editingId === item.id ? (
                                     <>
                                         <input
@@ -217,7 +219,7 @@ function ManageList({ context, listLoader  }) {
                     })}
 
                     {filtered.length === 0 && !isAdding && (
-                        <li className="manage-list__empty">No results for "{query}"</li>
+                        <li className="simple-list__empty">No results for "{query}"</li>
                     )}
                 </ul>
             )}

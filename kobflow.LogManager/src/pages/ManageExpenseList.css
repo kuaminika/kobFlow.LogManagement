@@ -1,0 +1,290 @@
+/* ManageExpenseList.css */
+
+.expense-table {
+  --ml-border: #e2e5ea;
+  --ml-border-strong: #cbd0d8;
+  --ml-text: #1f2430;
+  --ml-text-muted: #6b7280;
+  --ml-accent: #3b5bdb;
+  --ml-accent-soft: #eef1fd;
+  --ml-danger: #c92a2a;
+  --ml-danger-soft: #fdecec;
+  --ml-surface: #ffffff;
+  --ml-surface-alt: #f8f9fb;
+  --ml-radius: 8px;
+
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+  color: var(--ml-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+}
+
+.expense-table h2 {
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 20px;
+}
+
+/* --- Toolbar --- */
+
+.expense-table__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.expense-table__toolbar input[type="text"] {
+  flex: 1;
+  max-width: 320px;
+  padding: 9px 12px;
+  font-size: 0.9rem;
+  border: 1px solid var(--ml-border-strong);
+  border-radius: var(--ml-radius);
+  background: var(--ml-surface);
+  color: var(--ml-text);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.expense-table__toolbar input[type="text"]:focus {
+  outline: none;
+  border-color: var(--ml-accent);
+  box-shadow: 0 0 0 3px var(--ml-accent-soft);
+}
+
+.expense-table__toolbar input[type="text"]:disabled {
+  background: var(--ml-surface-alt);
+  cursor: not-allowed;
+}
+
+.expense-table__toolbar button {
+  padding: 9px 16px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--ml-radius);
+  background: var(--ml-accent);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  white-space: nowrap;
+}
+
+.expense-table__toolbar button:hover:not(:disabled) {
+  background: #2f4bc7;
+}
+
+.expense-table__toolbar button:disabled {
+  background: var(--ml-border-strong);
+  cursor: not-allowed;
+}
+
+.expense-table__loading {
+  padding: 32px 0;
+  text-align: center;
+  color: var(--ml-text-muted);
+  font-size: 0.9rem;
+}
+
+/* --- Table shell --- */
+
+.expense-table__table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--ml-surface);
+  border: 1px solid var(--ml-border);
+  border-radius: var(--ml-radius);
+  overflow: hidden;
+  font-size: 0.875rem;
+}
+
+.expense-table__table thead th {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ml-text-muted);
+  background: var(--ml-surface-alt);
+  border-bottom: 1px solid var(--ml-border);
+  white-space: nowrap;
+}
+
+.expense-table__table thead th:last-child,
+.expense-table__table tbody td:last-child {
+  text-align: right;
+}
+
+.expense-table__table tbody td {
+  padding: 10px 14px;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--ml-border);
+  color: var(--ml-text);
+}
+
+/* Keep the date column tight instead of wrapping into two lines */
+.expense-table__table td:first-child,
+.expense-table__table th:first-child {
+  white-space: nowrap;
+  width: 1%;
+  color: var(--ml-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Amount column: right-align, tabular numerals so decimals line up */
+.expense-table__table td:nth-last-child(2),
+.expense-table__table th:nth-last-child(2) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.expense-table__item:hover td {
+  background: var(--ml-surface-alt);
+}
+
+.expense-table__item:last-child td {
+  border-bottom: none;
+}
+
+.expense-table__item--new td {
+  background: var(--ml-accent-soft);
+}
+
+.expense-table__empty {
+  text-align: center !important;
+  padding: 32px 14px !important;
+  color: var(--ml-text-muted);
+}
+
+/* --- Inline edit inputs inside cells --- */
+
+.expense-table__table td input[type="text"],
+.expense-table__table td input[type="date"],
+.expense-table__table td input[type="number"] {
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 0.85rem;
+  border: 1px solid var(--ml-border-strong);
+  border-radius: 6px;
+  background: var(--ml-surface);
+  color: var(--ml-text);
+}
+
+.expense-table__table td input:focus {
+  outline: none;
+  border-color: var(--ml-accent);
+  box-shadow: 0 0 0 3px var(--ml-accent-soft);
+}
+
+.expense-table__table td input:disabled {
+  background: var(--ml-surface-alt);
+  cursor: not-allowed;
+}
+
+/* --- Action buttons --- */
+
+.expense-table__table td:last-child {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.expense-table__table td:last-child button {
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid var(--ml-border-strong);
+  background: var(--ml-surface);
+  color: var(--ml-text);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.expense-table__table td:last-child button:hover:not(:disabled) {
+  border-color: var(--ml-accent);
+  color: var(--ml-accent);
+}
+
+.expense-table__table td:last-child button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Delete button — second action button in the actions cell */
+.expense-table__table td:last-child button:nth-of-type(2) {
+  border-color: transparent;
+}
+
+.expense-table__table td:last-child button:nth-of-type(2):hover:not(:disabled) {
+  background: var(--ml-danger-soft);
+  border-color: var(--ml-danger);
+  color: var(--ml-danger);
+}
+
+/* Save button (primary action while editing/adding) gets accent styling */
+.expense-table__item--new td:last-child button:first-of-type,
+.expense-table__item td:last-child button:first-of-type:not(:only-of-type) {
+  background: var(--ml-accent);
+  border-color: var(--ml-accent);
+  color: #fff;
+}
+
+.expense-table__item--new td:last-child button:first-of-type:hover:not(:disabled),
+.expense-table__item td:last-child button:first-of-type:not(:only-of-type):hover:not(:disabled) {
+  background: #2f4bc7;
+  color: #fff;
+}
+
+/* --- Responsive: collapse to cards below ~720px --- */
+
+@media (max-width: 720px) {
+  .expense-table__table thead {
+    display: none;
+  }
+
+  .expense-table__table,
+  .expense-table__table tbody,
+  .expense-table__table tr,
+  .expense-table__table td {
+    display: block;
+    width: 100%;
+  }
+
+  .expense-table__item {
+    border: 1px solid var(--ml-border);
+    border-radius: var(--ml-radius);
+    margin-bottom: 10px;
+    padding: 8px 4px;
+  }
+
+  .expense-table__table td {
+    border-bottom: none;
+    padding: 6px 12px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    text-align: right;
+  }
+
+  .expense-table__table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--ml-text-muted);
+    text-align: left;
+  }
+
+  .expense-table__table td:last-child {
+    justify-content: flex-start;
+    padding-top: 10px;
+  }
+
+  .expense-table__table td:last-child::before {
+    display: none;
+  }
+}

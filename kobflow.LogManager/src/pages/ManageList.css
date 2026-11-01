@@ -1,0 +1,236 @@
+/* ManageList.css */
+
+.simple-list {
+  --ml-border: #e2e5ea;
+  --ml-border-strong: #cbd0d8;
+  --ml-text: #1f2430;
+  --ml-text-muted: #6b7280;
+  --ml-accent: #3b5bdb;
+  --ml-accent-soft: #eef1fd;
+  --ml-danger: #c92a2a;
+  --ml-danger-soft: #fdecec;
+  --ml-surface: #ffffff;
+  --ml-surface-alt: #f8f9fb;
+  --ml-radius: 8px;
+
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+  color: var(--ml-text);
+  text-align: left;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+}
+
+.simple-list h2 {
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 20px;
+  text-align: left;
+}
+
+/* --- Toolbar --- */
+
+.simple-list__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.simple-list__toolbar input[type="text"] {
+  flex: 1;
+  padding: 9px 12px;
+  font-size: 0.9rem;
+  border: 1px solid var(--ml-border-strong);
+  border-radius: var(--ml-radius);
+  background: var(--ml-surface);
+  color: var(--ml-text);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.simple-list__toolbar input[type="text"]:focus {
+  outline: none;
+  border-color: var(--ml-accent);
+  box-shadow: 0 0 0 3px var(--ml-accent-soft);
+}
+
+.simple-list__toolbar input[type="text"]:disabled {
+  background: var(--ml-surface-alt);
+  cursor: not-allowed;
+}
+
+.simple-list__toolbar button {
+  padding: 9px 16px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--ml-radius);
+  background: var(--ml-accent);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.simple-list__toolbar button:hover:not(:disabled) {
+  background: #2f4bc7;
+}
+
+.simple-list__toolbar button:disabled {
+  background: var(--ml-border-strong);
+  cursor: not-allowed;
+}
+
+.simple-list__loading {
+  padding: 32px 0;
+  text-align: center;
+  color: var(--ml-text-muted);
+  font-size: 0.9rem;
+}
+
+/* --- List shell --- */
+
+.simple-list__items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--ml-border);
+  border-radius: var(--ml-radius);
+  background: var(--ml-surface);
+  overflow: hidden;
+}
+
+.simple-list__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--ml-border);
+  transition: background 0.1s ease;
+}
+
+.simple-list__item:last-child {
+  border-bottom: none;
+}
+
+.simple-list__item:hover {
+  background: var(--ml-surface-alt);
+}
+
+.simple-list__item--new {
+  background: var(--ml-accent-soft);
+}
+
+.simple-list__item--new:hover {
+  background: var(--ml-accent-soft);
+}
+
+/* The name/span takes remaining space; buttons stay right-aligned */
+.simple-list__item > span {
+  flex: 1;
+  min-width: 0;
+  color: var(--ml-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Text input used both for editing an existing item and for the new-item row */
+.simple-list__item > input[type="text"] {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 8px;
+  font-size: 0.85rem;
+  border: 1px solid var(--ml-border-strong);
+  border-radius: 6px;
+  background: var(--ml-surface);
+  color: var(--ml-text);
+}
+
+.simple-list__item > input[type="text"]:focus {
+  outline: none;
+  border-color: var(--ml-accent);
+  box-shadow: 0 0 0 3px var(--ml-accent-soft);
+}
+
+.simple-list__item > input[type="text"]:disabled {
+  background: var(--ml-surface-alt);
+  cursor: not-allowed;
+}
+
+/* --- Action buttons --- */
+
+.simple-list__item button {
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid var(--ml-border-strong);
+  background: var(--ml-surface);
+  color: var(--ml-text);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.simple-list__item button:hover:not(:disabled) {
+  border-color: var(--ml-accent);
+  color: var(--ml-accent);
+}
+
+.simple-list__item button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Save button = first button in the row → primary accent style */
+.simple-list__item button:first-of-type {
+  background: var(--ml-accent);
+  border-color: var(--ml-accent);
+  color: #fff;
+}
+
+.simple-list__item button:first-of-type:hover:not(:disabled) {
+  background: #2f4bc7;
+  color: #fff;
+}
+
+/* Delete = last button in a non-editing row → danger style on hover.
+   :not(:first-of-type) keeps this from clashing with Save's accent style above. */
+.simple-list__item button:last-of-type:not(:first-of-type) {
+  border-color: transparent;
+}
+
+.simple-list__item button:last-of-type:not(:first-of-type):hover:not(:disabled) {
+  background: var(--ml-danger-soft);
+  border-color: var(--ml-danger);
+  color: var(--ml-danger);
+}
+
+.simple-list__empty {
+  text-align: center;
+  padding: 32px 14px;
+  color: var(--ml-text-muted);
+  list-style: none;
+}
+
+/* --- Responsive --- */
+
+@media (max-width: 480px) {
+  .simple-list__item {
+    flex-wrap: wrap;
+  }
+
+  .simple-list__item > span,
+  .simple-list__item > input[type="text"] {
+    flex-basis: 100%;
+  }
+
+  .simple-list__item button {
+    flex: 1;
+  }
+}
