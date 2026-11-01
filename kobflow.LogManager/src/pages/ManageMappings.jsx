@@ -1,4 +1,4 @@
-function ManageMappings() {
+function ManageMappings({ listLoader }) {
 
     return (
         <div>

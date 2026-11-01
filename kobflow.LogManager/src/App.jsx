@@ -46,11 +46,14 @@ function App() {
   const kobHoldeEndpointSet = new EndpointSet({list:configs["VITE_URL_MERCHANT"],remove: configs["VITE_URL_FORDELETE"],update:configs["VITE_URL_FORUPDATE"],create:configs["VITE_URL_FORADD"]});
   const merchantEndpointSet = new EndpointSet({list:configs["VITE_URL_KOBHOLDER"],remove: configs["VITE_URL_FORDELETE"],update:configs["VITE_URL_FORUPDATE"],create:configs["VITE_URL_FORADD"]});
   const expenseCategoryEndpointSet = new EndpointSet({list:configs["VITE_URL_EXPENSE_CATEGORY"],remove: configs["VITE_URL_FORDELETE"],update:configs["VITE_URL_FORUPDATE"],create:configs["VITE_URL_FORADD"]});
+  const merchantMappingEndpointSet = new EndpointSet({   list: configs["VITE_URL_MERCHANT_MAPPING"],  remove: configs["VITE_URL_FORDELETE"],  update: configs["VITE_URL_FORUPDATE"],  create: configs["VITE_URL_FORADD"]});
+
+
 
   const listLoader_kobHolder= new ListLoader({context:"KOBHOLDER",kCourrier, endpoints: kobHoldeEndpointSet, cacher});
   const listLoader_merchant= new ListLoader({context:"Merchant",kCourrier, endpoints:merchantEndpointSet , cacher});
   const listLoader_expenseCategory= new ListLoader({context:"ExpenseCategory",kCourrier, endpoints:expenseCategoryEndpointSet , cacher});
-
+  const listLoader_merchantMapping = new ListLoader({ context: "MerchantMapping", kCourrier, endpoints: merchantMappingEndpointSet, cacher });
   
 //TODO: need to make sure that there is a page to manage expenses
 //TODO: need to make sure that there is a page to manage mappings. 
@@ -74,7 +77,7 @@ function App() {
         <Route path="/ManageCategories" element={<ManageList context="Categories" listLoader={listLoader_expenseCategory} />} />
         <Route path="/ManageExpenses" element={<ManageExpenseList context="Expenses" listLoaders={allListHolders} />} />
         <Route path="/CacheManager" element={<CacheManagerPage cacher={cacher}/>} />
-        <Route path="/ManageMerchantMappings" element={<ManageMappings />} />
+        <Route path="/ManageMerchantMappings" element={<ManageMappings listLoader={listLoader_merchantMapping} />} />
       </Routes>
     </BrowserRouter>
   )
